@@ -3,7 +3,7 @@ import ServerError from '../util/ServerError'
 import * as Toolkit from '../util/Toolkit'
 
 export const validteUserCategory = async(userId, categoryId) => {
-    let data = await db.category.findOne({
+    const data = await db.category.findOne({
         where: {
             userId,
             id: categoryId

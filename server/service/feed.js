@@ -80,7 +80,7 @@ export const parseFeed = address => {
     const feedParser = new FeedParser();
     request(options)
         .on('error', err => {
-            console.log(`error:${err}`);
+            throw new ServerError(`Meet some error when request feed: ${err}`);
         })
         .on('response', res => {
             if (res.statusCode != 200) {
