@@ -42,7 +42,6 @@ export const addFeed = async(userId, categoryId, attributes) => {
                 include: [{ model: db.feed, as: 'feeds', where: { id: feed.id }
                      }]
             });
-            console.log(category)
             Toolkit.assertNull(category, 'You have already had this feed!');
         }
         category = await db.category.findById(categoryId);
@@ -58,11 +57,11 @@ export const addFeed = async(userId, categoryId, attributes) => {
 }
 export const deleteFeed = async(userId, categoryId, id) => {
     await validteUserCategory(userId, categoryId);
-    let feed = await db.feed.findById(id);
+    const feed = await db.feed.findById(id);
     Toolkit.assertNotNull(feed, 'The request feed does not exist!');
     const result = await db.sequelize.transaction(async t => {
-            let category = await db.category.findById(categoryId);
-            let res = await category.removeFeed(feed, { transaction: t });
+            const category = await db.category.findById(categoryId);
+            const res = await category.removeFeed(feed, { transaction: t });
             return res;
     })
     .catch(err => {
