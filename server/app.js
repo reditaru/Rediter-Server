@@ -12,6 +12,7 @@ app.use(async(ctx, next) => {
         await next();
     } catch (err) {
         console.log(err)
+        ctx.body = { success: false, err };
     }
 });
 app.use(logger())
