@@ -3,6 +3,7 @@ import views from 'koa-views'
 import serve from 'koa-static'
 import mount from 'koa-mount'
 import logger from 'koa-logger'
+import cors from '@koa/cors'
 import path from 'path'
 import { root, api } from './controller/root'
 
@@ -19,6 +20,7 @@ app.use(logger())
 app.use(views(path.join(__dirname, 'views'), {
     extension: 'jade'
 }))
+app.use(cors())
 app.use(mount('/static', serve('static/')))
 app.use(api.middleware())
 app.use(root.middleware())
