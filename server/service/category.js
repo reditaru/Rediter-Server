@@ -46,7 +46,7 @@ export const updateCategory = async(userId, id, name) => {
     let category = await db.category.findById(id);
     Toolkit.assertNotNull(category, 'The request category does not exist!');
     const result = await db.sequelize.transaction(async t => {
-            category = await category.updateAttribute({
+            category = await category.updateAttributes({
                 name
             }, { transaction: t });
             return category;

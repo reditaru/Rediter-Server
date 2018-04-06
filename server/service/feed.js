@@ -1,5 +1,5 @@
 import FeedParser from 'feedparser'
-import request from 'request-promise'
+import request from 'request'
 import db from '../data/index'
 import ServerError from '../util/ServerError'
 import * as Toolkit from '../util/Toolkit'
@@ -69,26 +69,25 @@ export const deleteFeed = async(userId, categoryId, id) => {
     });
     return result === 1 ? 'Delete success!' : 'You have already deleted the feed yet!';
 }
-export const parseFeed = address => {
-    const options = {
-        url: address,
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36',
-            Accept: 'text/html,application/xhtml+xml'
-        }
-    }
-    const feedParser = new FeedParser();
-    request(options)
-        .on('error', err => {
-            throw new ServerError(`Meet some error when request feed: ${err}`);
-        })
-        .on('response', res => {
-            if (res.statusCode != 200) {
-                throw new ServerError('The feed return invalid data.');
+export const parseFeed = address => new Promise((resolve, reject) => {
+        const options = {
+            url: address,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36',
+                Accept: 'text/html,application/xhtml+xml'
             }
-        })
-        .pipe(feedParser);
-    return new Promise((resolve, reject) => {
+        }
+        const feedParser = new FeedParser();
+            request(options)
+            .on('error', function(err) {
+                reject(new ServerError(`Meet Error: ${err}`));
+            })
+            .on('response', res => {
+                if (res.statusCode != 200) {
+                    reject(new ServerError('The feed return invalid data.'));
+                }
+            })
+            .pipe(feedParser);
         let meta;
         feedParser.on('readable', function() {
             let item;
@@ -102,5 +101,4 @@ export const parseFeed = address => {
         feedParser.on('end', () => {
             resolve(meta);
         });
-    });
-}
+    })

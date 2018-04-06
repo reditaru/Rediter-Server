@@ -28,7 +28,7 @@ category
 })
 .put('/category/:id', { validate: validateCategory }, async ctx => {
     const { id } = ctx.state.user;
-    const data = await CategoryService.updateCategory(id, ctx.params.id);
+    const data = await CategoryService.updateCategory(id, ctx.params.id, ctx.request.body.name);
     ctx.body = Toolkit.assemblyResponseBody(data);
 })
 .delete('/category/:id', async ctx => {
