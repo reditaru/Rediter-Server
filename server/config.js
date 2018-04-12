@@ -7,6 +7,8 @@ export default {
         dialect: 'mysql',
         host: 'localhost',
         port: 3306,
+        charset: 'utf-8',
+        collate: 'utf8_general_ci',
         pool: {
             max: 10,
             min: 0,

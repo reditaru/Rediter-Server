@@ -8,7 +8,11 @@ const sequelize = new Sequelize(dataConfig.name, dataConfig.username, dataConfig
     dialect: dataConfig.dialect,
     host: dataConfig.host,
     port: dataConfig.port,
-    pool: dataConfig.pool
+    pool: dataConfig.pool,
+    define: {
+        charset: dataConfig.charset,
+        collate: 'utf8_general_ci'
+    }
 })
 const db = {}
 fs
